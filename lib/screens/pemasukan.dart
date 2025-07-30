@@ -58,49 +58,130 @@ class _PemasukanScreenState extends State<PemasukanScreen> {
           appBar: AppBar(
             title: const Text('Pemasukan'), // atau 'Pengeluaran'
             actions: [
-              DropdownButton<FilterMode>(
-                value: _filterMode,
-                underline: const SizedBox(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _filterMode = value;
-                      final now = DateTime.now();
-                      // Auto select sesuai filter yang dipilih
-                      if (value == FilterMode.harian) {
-                        _selectedDate = now; // Auto select today
-                      } else if (value == FilterMode.bulanan) {
-                        _selectedDate = DateTime(
-                          now.year,
-                          now.month,
-                          1,
-                        ); // Auto select bulan ini
-                      } else if (value == FilterMode.tahunan) {
-                        _selectedDate = DateTime(
-                          now.year,
-                          1,
-                          1,
-                        ); // Auto select tahun ini
-                      }
-                    });
-                  }
+              PopupMenuButton<FilterMode>(
+                icon: const Icon(Icons.filter_list),
+                onSelected: (value) {
+                  setState(() {
+                    _filterMode = value;
+                    final now = DateTime.now();
+                    // Auto select sesuai filter yang dipilih
+                    if (value == FilterMode.harian) {
+                      _selectedDate = now; // Auto select today
+                    } else if (value == FilterMode.bulanan) {
+                      _selectedDate = DateTime(
+                        now.year,
+                        now.month,
+                        1,
+                      ); // Auto select bulan ini
+                    } else if (value == FilterMode.tahunan) {
+                      _selectedDate = DateTime(
+                        now.year,
+                        1,
+                        1,
+                      ); // Auto select tahun ini
+                    }
+                  });
                 },
-                items: const [
-                  DropdownMenuItem(
+                itemBuilder: (context) => [
+                  PopupMenuItem(
                     value: FilterMode.harian,
-                    child: Text('Harian'),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          color: _filterMode == FilterMode.harian
+                              ? Colors.blue
+                              : null,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Harian',
+                          style: TextStyle(
+                            fontWeight: _filterMode == FilterMode.harian
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: _filterMode == FilterMode.harian
+                                ? Colors.blue
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  DropdownMenuItem(
+                  PopupMenuItem(
                     value: FilterMode.bulanan,
-                    child: Text('Bulanan'),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.today,
+                          color: _filterMode == FilterMode.bulanan
+                              ? Colors.blue
+                              : null,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Bulanan',
+                          style: TextStyle(
+                            fontWeight: _filterMode == FilterMode.bulanan
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: _filterMode == FilterMode.bulanan
+                                ? Colors.blue
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  DropdownMenuItem(
+                  PopupMenuItem(
                     value: FilterMode.tahunan,
-                    child: Text('Tahunan'),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_month,
+                          color: _filterMode == FilterMode.tahunan
+                              ? Colors.blue
+                              : null,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Tahunan',
+                          style: TextStyle(
+                            fontWeight: _filterMode == FilterMode.tahunan
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: _filterMode == FilterMode.tahunan
+                                ? Colors.blue
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  DropdownMenuItem(
+                  PopupMenuItem(
                     value: FilterMode.semua,
-                    child: Text('Semua'),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.save,
+                          color: _filterMode == FilterMode.semua
+                              ? Colors.blue
+                              : null,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Semua',
+                          style: TextStyle(
+                            fontWeight: _filterMode == FilterMode.semua
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: _filterMode == FilterMode.semua
+                                ? Colors.blue
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -223,11 +304,11 @@ class _PemasukanScreenState extends State<PemasukanScreen> {
                                                 margin: const EdgeInsets.all(4),
                                                 decoration: BoxDecoration(
                                                   color: isDisabled
-                                                      ? Colors.grey[300]
+                                                      ? Colors.grey[350]
                                                       : selectedMonth ==
                                                             monthIndex
-                                                      ? Colors.blue
-                                                      : Colors.grey[200],
+                                                      ? Colors.purple[900]
+                                                      : Colors.white,
                                                   borderRadius:
                                                       BorderRadius.circular(8),
                                                 ),
@@ -394,10 +475,10 @@ class _PemasukanScreenState extends State<PemasukanScreen> {
                                                 margin: const EdgeInsets.all(4),
                                                 decoration: BoxDecoration(
                                                   color: isDisabled
-                                                      ? Colors.grey[300]
+                                                      ? Colors.grey[350]
                                                       : selectedYear == year
-                                                      ? Colors.blue
-                                                      : Colors.grey[200],
+                                                      ? Colors.purple[900]
+                                                      : Colors.white,
                                                   borderRadius:
                                                       BorderRadius.circular(8),
                                                 ),
