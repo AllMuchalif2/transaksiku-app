@@ -1,9 +1,42 @@
+// ==================== IMPORT ====================
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/transaksi.dart';
 import '../providers/transaksi_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
+// ==================== END IMPORT ====================
 
+// ==================== FORMATTER UNTUK RUPIAH ====================
+class CurrencyInputFormatter extends TextInputFormatter {
+  final NumberFormat _formatter = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp',
+    decimalDigits: 0,
+  );
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Menghapus semua karakter kecuali angka
+    String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (newText.isEmpty) return newValue.copyWith(text: '');
+
+    // Format ulang jadi rupiah
+    final number = int.parse(newText);
+    final newString = _formatter.format(number);
+
+    return TextEditingValue(
+      text: newString,
+      selection: TextSelection.collapsed(offset: newString.length),
+    );
+  }
+}
+// ==================== END FORMATTER ====================
+
+// ==================== FORM TRANSAKSI ====================
 class FormTransaksi extends StatefulWidget {
   final String jenis; // pemasukan / pengeluaran
   final Transaksi? transaksi;
@@ -13,6 +46,7 @@ class FormTransaksi extends StatefulWidget {
   @override
   State<FormTransaksi> createState() => _FormTransaksiState();
 }
+// ==================== END HEADER WIDGET ====================
 
 class _FormTransaksiState extends State<FormTransaksi> {
   final _formKey = GlobalKey<FormState>();
@@ -20,22 +54,36 @@ class _FormTransaksiState extends State<FormTransaksi> {
   final TextEditingController _jumlahController = TextEditingController();
   DateTime _tanggal = DateTime.now();
 
+  // ==================== INISIALISASI ====================
   @override
   void initState() {
     super.initState();
     if (widget.transaksi != null) {
       _namaController.text = widget.transaksi!.nama;
-      _jumlahController.text = widget.transaksi!.jumlah.toString();
+      _jumlahController.text = NumberFormat.currency(
+        locale: 'id_ID',
+        symbol: 'Rp',
+        decimalDigits: 0,
+      ).format(widget.transaksi!.jumlah);
       _tanggal = widget.transaksi!.tanggal;
     }
   }
+  // ==================== END INISIALISASI ====================
 
+  // ==================== SIMPAN TRANSAKSI ====================
   void _simpan() {
     if (_formKey.currentState!.validate()) {
+      // Ambil hanya angka dari string
+      final nilaiBersih = _jumlahController.text.replaceAll(
+        RegExp(r'[^0-9]'),
+        '',
+      );
+      final jumlahUang = int.parse(nilaiBersih);
+
       final transaksiBaru = Transaksi(
         id: widget.transaksi?.id,
         nama: _namaController.text,
-        jumlah: int.parse(_jumlahController.text),
+        jumlah: jumlahUang,
         jenis: widget.jenis,
         tanggal: _tanggal,
       );
@@ -50,13 +98,15 @@ class _FormTransaksiState extends State<FormTransaksi> {
       Navigator.pop(context);
     }
   }
+  // ==================== END SIMPAN ====================
 
+  // ==================== PILIH TANGGAL ====================
   Future<void> _pilihTanggal() async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _tanggal,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
     );
     if (picked != null) {
       setState(() {
@@ -64,7 +114,9 @@ class _FormTransaksiState extends State<FormTransaksi> {
       });
     }
   }
+  // ==================== END PILIH TANGGAL ====================
 
+  // ==================== BUILD UI ====================
   @override
   Widget build(BuildContext context) {
     final isEdit = widget.transaksi != null;
@@ -79,22 +131,31 @@ class _FormTransaksiState extends State<FormTransaksi> {
           key: _formKey,
           child: Column(
             children: [
+              // ===== Field Nama =====
               TextFormField(
                 controller: _namaController,
                 decoration: const InputDecoration(labelText: 'Nama Transaksi'),
                 validator: (value) =>
                     value == null || value.isEmpty ? 'Wajib diisi' : null,
               ),
+              // ===== Field Jumlah Uang (Dengan Format Rupiah) =====
               TextFormField(
                 controller: _jumlahController,
                 decoration: const InputDecoration(labelText: 'Jumlah Uang'),
                 keyboardType: TextInputType.number,
-                validator: (value) =>
-                    value == null || int.tryParse(value) == null
-                    ? 'Masukkan angka valid'
-                    : null,
+                inputFormatters: [CurrencyInputFormatter()],
+                validator: (value) {
+                  if (value == null || value.isEmpty)
+                    return 'Masukkan jumlah uang';
+                  final cleaned = value.replaceAll(RegExp(r'[^0-9]'), '');
+                  if (cleaned.isEmpty || int.tryParse(cleaned) == null) {
+                    return 'Masukkan angka valid';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
+              // ===== Tanggal =====
               Row(
                 children: [
                   Text('Tanggal: ${DateFormat('dd/MM/yyyy').format(_tanggal)}'),
@@ -106,6 +167,7 @@ class _FormTransaksiState extends State<FormTransaksi> {
                 ],
               ),
               const SizedBox(height: 24),
+              // ===== Tombol Simpan =====
               ElevatedButton.icon(
                 onPressed: _simpan,
                 icon: const Icon(Icons.save),
@@ -117,4 +179,8 @@ class _FormTransaksiState extends State<FormTransaksi> {
       ),
     );
   }
+
+  // ==================== END BUILD ====================
 }
+
+// ==================== END FORM TRANSAKSI ====================

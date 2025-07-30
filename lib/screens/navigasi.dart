@@ -32,14 +32,11 @@ class _NavigasiScreenState extends State<NavigasiScreen> {
             _index = newIndex;
           });
         },
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Ringkasan',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
           BottomNavigationBarItem(
             icon: Icon(Icons.money_off),
             label: 'Pengeluaran',
