@@ -12,7 +12,6 @@
 
 **Transaksiku-App** adalah aplikasi pencatat transaksi yang membantu Anda mengelola dan memantau keuangan pribadi secara mudah. Dengan aplikasi ini, Anda dapat mencatat pemasukan dan pengeluaran, memfilter transaksi, serta mengetahui selisih keuangan setiap saat.
 
-Aplikasi ini dibangun menggunakan **Flutter**, sehingga dapat dijalankan di berbagai platform (Android, iOS, dan lainnya).
 
 ---
 
