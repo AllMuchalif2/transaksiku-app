@@ -55,6 +55,16 @@ class TransaksiProvider with ChangeNotifier {
     }
   }
 
+  // Menghapus semua transaksi
+  Future<void> hapusSemuaTransaksi() async {
+    try {
+      await _db.deleteAllTransaksi();
+      await loadTransaksi();
+    } catch (e) {
+      debugPrint("Error saat menghapus semua transaksi: $e");
+    }
+  }
+
   // Filter: Semua transaksi berdasarkan jenis
   List<Transaksi> getByJenis(String jenis) {
     return _daftarTransaksi.where((t) => t.jenis == jenis).toList();

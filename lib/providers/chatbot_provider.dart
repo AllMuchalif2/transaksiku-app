@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../models/transaksi.dart';
@@ -15,10 +16,10 @@ class ChatBotProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
 
   // 1. App Secret untuk autentikasi backend
-  static const String _appSecret = 'u-didnt-even-know';
+  final String _appSecret = dotenv.env['APP_SECRET']!;
 
-  // 2. URL Backend
-  final String _apiUrl = 'https://groq-for-transaksiku-app.vercel.app/api/bot';
+  // 2. URL Backend dari .env
+  final String _apiUrl = dotenv.env['BASE_URL']!;
 
   // Fungsi Utama: Kirim Pesan
   Future<void> sendMessage(

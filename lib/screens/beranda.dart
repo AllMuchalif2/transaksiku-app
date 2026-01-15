@@ -158,6 +158,7 @@ class _BerandaScreenState extends State<BerandaScreen> {
 
                   // Kartu yang menampilkan ringkasan pemasukan, pengeluaran, dan selisih.
                   Card(
+                    color: Theme.of(context).cardColor,
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -165,12 +166,10 @@ class _BerandaScreenState extends State<BerandaScreen> {
                           RingkasanItem(
                             label: 'Pemasukan',
                             value: totalPemasukan,
-                            color: Colors.black,
                           ),
                           RingkasanItem(
                             label: 'Pengeluaran',
                             value: totalPengeluaran,
-                            color: Colors.black,
                           ),
                           const Divider(),
                           RingkasanItem(
@@ -197,13 +196,13 @@ class _BerandaScreenState extends State<BerandaScreen> {
 class RingkasanItem extends StatelessWidget {
   final String label;
   final int value;
-  final Color color;
+  final Color? color;
 
   const RingkasanItem({
     super.key,
     required this.label,
     required this.value,
-    required this.color,
+    this.color,
   });
 
   @override
@@ -220,7 +219,12 @@ class RingkasanItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(format, style: TextStyle(color: color)),
+          Text(
+            format,
+            style: TextStyle(
+              color: color ?? Theme.of(context).textTheme.bodyLarge?.color,
+            ),
+          ),
         ],
       ),
     );

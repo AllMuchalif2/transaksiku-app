@@ -80,6 +80,16 @@ class DatabaseHelper {
     }
   }
 
+  Future<void> deleteAllTransaksi() async {
+    try {
+      final dbClient = await db;
+      await dbClient.delete('transaksi');
+    } catch (e) {
+      debugPrint("Error saat delete all: $e");
+      rethrow;
+    }
+  }
+
   Future close() async {
     final dbClient = await db;
     dbClient.close();

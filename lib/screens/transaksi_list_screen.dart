@@ -82,12 +82,11 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                         builder: (context, child) {
                           return Theme(
                             data: Theme.of(context).copyWith(
-                              colorScheme: ColorScheme.light(
-                                primary: widget.appBarColor,
-                                onPrimary: Colors.white,
-                                surface: Colors.white,
-                                onSurface: Colors.black,
-                              ),
+                              colorScheme:
+                                  Theme.of(context).colorScheme.copyWith(
+                                        primary: widget.appBarColor,
+                                        onPrimary: Colors.white,
+                                      ),
                             ),
                             child: child!,
                           );
@@ -165,23 +164,13 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                                           itemCount: 12,
                                           itemBuilder: (context, index) {
                                             final monthNames = [
-                                              'Jan',
-                                              'Feb',
-                                              'Mar',
-                                              'Apr',
-                                              'Mei',
-                                              'Jun',
-                                              'Jul',
-                                              'Ags',
-                                              'Sep',
-                                              'Okt',
-                                              'Nov',
-                                              'Des',
+                                              'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+                                              'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'
                                             ];
                                             final monthIndex = index + 1;
-                                            bool isDisabled =
+                                            final isDisabled =
                                                 selectedYear == now.year &&
-                                                monthIndex > now.month;
+                                                    monthIndex > now.month;
 
                                             return GestureDetector(
                                               onTap: isDisabled
@@ -193,14 +182,18 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                                                       });
                                                     },
                                               child: Container(
-                                                margin: const EdgeInsets.all(4),
+                                                margin:
+                                                    const EdgeInsets.all(4),
                                                 decoration: BoxDecoration(
                                                   color: isDisabled
-                                                      ? Colors.grey[350]
+                                                      ? Theme.of(context)
+                                                          .disabledColor
                                                       : selectedMonth ==
-                                                            monthIndex
-                                                      ? widget.appBarColor
-                                                      : Colors.white,
+                                                              monthIndex
+                                                          ? widget
+                                                              .appBarColor
+                                                          : Theme.of(context)
+                                                              .cardColor,
                                                   borderRadius:
                                                       BorderRadius.circular(8),
                                                 ),
@@ -209,53 +202,58 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                                                     monthNames[index],
                                                     style: TextStyle(
                                                       color: isDisabled
-                                                          ? Colors.grey[500]
+                                                          ? Theme.of(context)
+                                                              .disabledColor
                                                           : selectedMonth ==
-                                                                monthIndex
-                                                          ? Colors.white
-                                                          : Colors.black,
+                                                                  monthIndex
+                                                              ? Colors.white
+                                                              : Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyLarge
+                                                                  ?.color,
                                                       fontWeight:
                                                           selectedMonth ==
-                                                              monthIndex
-                                                          ? FontWeight.bold
-                                                          : FontWeight.normal,
+                                                                  monthIndex
+                                                              ? FontWeight.bold
+                                                              : FontWeight
+                                                                  .normal,
                                                     ),
                                                   ),
                                                 ),
                                               ),
                                             );
                                           },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, null),
+                                      child: Text(
+                                        'Batal',
+                                        style: TextStyle(
+                                          color: widget.appBarColor,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(context, null),
-                                    child: Text(
-                                      'Batal',
-                                      style: TextStyle(
-                                        color: widget.appBarColor,
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, {
+                                          'year': selectedYear,
+                                          'month': selectedMonth,
+                                        });
+                                      },
+                                      child: Text(
+                                        'OK',
+                                        style: TextStyle(
+                                          color: widget.appBarColor,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, {
-                                        'year': selectedYear,
-                                        'month': selectedMonth,
-                                      });
-                                    },
-                                    child: Text(
-                                      'OK',
-                                      style: TextStyle(
-                                        color: widget.appBarColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  ],
                               );
                             },
                           );
@@ -352,10 +350,12 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                                                 margin: const EdgeInsets.all(4),
                                                 decoration: BoxDecoration(
                                                   color: isDisabled
-                                                      ? Colors.grey[350]
+                                                      ? Theme.of(context)
+                                                          .disabledColor
                                                       : selectedYear == year
-                                                      ? widget.appBarColor
-                                                      : Colors.white,
+                                                          ? widget.appBarColor
+                                                          : Theme.of(context)
+                                                              .cardColor,
                                                   borderRadius:
                                                       BorderRadius.circular(8),
                                                 ),
@@ -364,14 +364,19 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                                                     year.toString(),
                                                     style: TextStyle(
                                                       color: isDisabled
-                                                          ? Colors.grey[500]
+                                                          ? Theme.of(context)
+                                                              .disabledColor
                                                           : selectedYear == year
-                                                          ? Colors.white
-                                                          : Colors.black,
+                                                              ? Colors.white
+                                                              : Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyLarge
+                                                                  ?.color,
                                                       fontWeight:
                                                           selectedYear == year
-                                                          ? FontWeight.bold
-                                                          : FontWeight.normal,
+                                                              ? FontWeight.bold
+                                                              : FontWeight
+                                                                  .normal,
                                                     ),
                                                   ),
                                                 ),
@@ -443,7 +448,7 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                           Icons.calendar_today,
                           color: _filterMode == FilterMode.harian
                               ? Colors.teal
-                              : Colors.black,
+                              : Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -454,7 +459,7 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                                 : FontWeight.normal,
                             color: _filterMode == FilterMode.harian
                                 ? Colors.teal
-                                : Colors.black,
+                                : Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
                       ],
@@ -468,7 +473,7 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                           Icons.today,
                           color: _filterMode == FilterMode.bulanan
                               ? Colors.teal
-                              : Colors.black,
+                              : Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -479,7 +484,7 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                                 : FontWeight.normal,
                             color: _filterMode == FilterMode.bulanan
                                 ? Colors.teal
-                                : Colors.black,
+                                : Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
                       ],
@@ -493,7 +498,7 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                           Icons.calendar_month,
                           color: _filterMode == FilterMode.tahunan
                               ? Colors.teal
-                              : Colors.black,
+                              : Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -504,7 +509,7 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                                 : FontWeight.normal,
                             color: _filterMode == FilterMode.tahunan
                                 ? Colors.teal
-                                : Colors.black,
+                                : Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
                       ],
@@ -518,7 +523,7 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                           Icons.save,
                           color: _filterMode == FilterMode.semua
                               ? Colors.teal
-                              : Colors.black,
+                              : Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -529,7 +534,7 @@ class _TransaksiListScreenState extends State<TransaksiListScreen> {
                                 : FontWeight.normal,
                             color: _filterMode == FilterMode.semua
                                 ? Colors.teal
-                                : Colors.black,
+                                : Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
                       ],
