@@ -17,28 +17,42 @@ class TransaksiProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    _daftarTransaksi = await _db.getTransaksi();
-
-    _isLoading = false;
-    notifyListeners();
+    try {
+      _daftarTransaksi = await _db.getTransaksi();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   // Menambah transaksi baru
   Future<void> tambahTransaksi(Transaksi trx) async {
-    await _db.insertTransaksi(trx);
-    await loadTransaksi();
+    try {
+      await _db.insertTransaksi(trx);
+      await loadTransaksi();
+    } catch (e) {
+      debugPrint("Error saat menambah transaksi: $e");
+    }
   }
 
   // Mengupdate data transaksi
   Future<void> updateTransaksi(Transaksi trx) async {
-    await _db.updateTransaksi(trx);
-    await loadTransaksi();
+    try {
+      await _db.updateTransaksi(trx);
+      await loadTransaksi();
+    } catch (e) {
+      debugPrint("Error saat mengupdate transaksi: $e");
+    }
   }
 
   // Menghapus transaksi berdasarkan ID
   Future<void> hapusTransaksi(int id) async {
-    await _db.deleteTransaksi(id);
-    await loadTransaksi();
+    try {
+      await _db.deleteTransaksi(id);
+      await loadTransaksi();
+    } catch (e) {
+      debugPrint("Error saat menghapus transaksi: $e");
+    }
   }
 
   // Filter: Semua transaksi berdasarkan jenis

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart'; // ← Tambahkan ini
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/transaksi_provider.dart';
+import 'providers/chatbot_provider.dart';
 import 'screens/navigasi.dart';
 
 void main() async {
@@ -11,7 +12,16 @@ void main() async {
   // Inisialisasi data lokal
   await initializeDateFormatting('id_ID', null);
 
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TransaksiProvider()),
+
+        ChangeNotifierProvider(create: (_) => ChatBotProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,14 +29,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => TransaksiProvider()..loadTransaksi(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Pencatatan Keuangan',
-        theme: ThemeData(primarySwatch: Colors.teal),
-        home: const NavigasiScreen(),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Pencatatan Keuangan',
+      theme: ThemeData(primarySwatch: Colors.teal),
+      home: const NavigasiScreen(),
     );
   }
 }

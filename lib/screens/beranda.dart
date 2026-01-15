@@ -4,21 +4,33 @@ import 'package:intl/intl.dart';
 
 import '../providers/transaksi_provider.dart';
 import '../models/transaksi.dart';
+import 'chatbot.dart';
 
-// ===================== RINGKASAN SCREEN =====================
-class RingkasanScreen extends StatefulWidget {
-  const RingkasanScreen({super.key});
+/// Layar utama yang menampilkan ringkasan keuangan.
+class BerandaScreen extends StatefulWidget {
+  const BerandaScreen({super.key});
 
   @override
-  State<RingkasanScreen> createState() => _RingkasanScreenState();
+  State<BerandaScreen> createState() => _BerandaScreenState();
 }
 
-// ===================== STATE RINGKASAN SCREEN =====================
-class _RingkasanScreenState extends State<RingkasanScreen> {
+class _BerandaScreenState extends State<BerandaScreen> {
   DateTime _today = DateTime.now();
-  String _filter = 'Harian';
+  String _filter = 'Harian'; // Filter default adalah 'Harian'.
 
-  // ===================== FORMAT RUPIAH =====================
+  @override
+  void initState() {
+    super.initState();
+    // Memuat data transaksi saat layar pertama kali dibuka.
+    Future.microtask(
+      () => Provider.of<TransaksiProvider>(
+        context,
+        listen: false,
+      ).loadTransaksi(),
+    );
+  }
+
+  /// Memformat angka integer menjadi format mata uang Rupiah.
   String formatRupiah(int jumlah) {
     return NumberFormat.currency(
       locale: 'id_ID',
@@ -26,13 +38,12 @@ class _RingkasanScreenState extends State<RingkasanScreen> {
       decimalDigits: 0,
     ).format(jumlah);
   }
-  // ===================== END FORMAT RUPIAH =====================
 
-  // ===================== BUILD =====================
   @override
   Widget build(BuildContext context) {
     return Consumer<TransaksiProvider>(
       builder: (context, provider, _) {
+        // Memfilter data transaksi berdasarkan pilihan filter.
         List<Transaksi> pemasukan;
         List<Transaksi> pengeluaran;
 
@@ -40,19 +51,17 @@ class _RingkasanScreenState extends State<RingkasanScreen> {
           pemasukan = provider.getByJenisHariIni('pemasukan');
           pengeluaran = provider.getByJenisHariIni('pengeluaran');
         } else if (_filter == 'Bulanan') {
-          // Ambil semua data pemasukan dan pengeluaran
           pemasukan = provider.getByJenisBulanIni('pemasukan');
           pengeluaran = provider.getByJenisBulanIni('pengeluaran');
         } else if (_filter == 'Tahunan') {
-          // Ambil semua data pemasukan dan pengeluaran
           pemasukan = provider.getByJenisTahunIni('pemasukan');
           pengeluaran = provider.getByJenisTahunIni('pengeluaran');
         } else {
-          // semua data
           pemasukan = provider.getByJenis('pemasukan');
           pengeluaran = provider.getByJenis('pengeluaran');
         }
 
+        // Menghitung total dari data yang sudah difilter.
         int totalPemasukan = pemasukan.fold(0, (sum, t) => sum + t.jumlah);
         int totalPengeluaran = pengeluaran.fold(0, (sum, t) => sum + t.jumlah);
         int selisih = totalPemasukan - totalPengeluaran;
@@ -60,8 +69,10 @@ class _RingkasanScreenState extends State<RingkasanScreen> {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Beranda'),
+            backgroundColor: Colors.teal,
+            foregroundColor: Colors.white,
             actions: [
-              // ===================== FILTER MENU =====================
+              // Tombol untuk memilih filter data.
               PopupMenuButton<String>(
                 icon: const Icon(Icons.filter_list),
                 onSelected: (value) {
@@ -88,18 +99,29 @@ class _RingkasanScreenState extends State<RingkasanScreen> {
                   ),
                 ],
               ),
-              // ===================== END FILTER MENU =====================
             ],
           ),
 
-          // ===================== BODY =====================
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChatBotScreen()),
+              );
+            },
+            tooltip: 'Tanya AI',
+            backgroundColor: Colors.teal,
+            foregroundColor: Colors.white,
+            child: const Icon(Icons.smart_toy, color: Colors.white),
+          ),
+
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ===================== TANGGAL & WAKTU =====================
+                  // Menampilkan tanggal dan waktu saat ini.
                   Center(
                     child: Column(
                       children: [
@@ -118,10 +140,9 @@ class _RingkasanScreenState extends State<RingkasanScreen> {
                               : _filter == 'Tahunan'
                               ? 'Tahun ' +
                                     DateFormat('yyyy', 'id_ID').format(_today)
-                              : 'Semua Data', // untuk filter 'Semua'
+                              : 'Semua Data',
                           style: const TextStyle(fontSize: 18),
                         ),
-
                         const SizedBox(height: 10),
                         Text(
                           DateFormat('HH:mm').format(_today),
@@ -133,11 +154,9 @@ class _RingkasanScreenState extends State<RingkasanScreen> {
                       ],
                     ),
                   ),
-
-                  // ===================== END TANGGAL & WAKTU =====================
                   const SizedBox(height: 24),
 
-                  // ===================== RINGKASAN =====================
+                  // Kartu yang menampilkan ringkasan pemasukan, pengeluaran, dan selisih.
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -163,23 +182,18 @@ class _RingkasanScreenState extends State<RingkasanScreen> {
                       ),
                     ),
                   ),
-
-                  // ===================== END RINGKASAN =====================
                   const SizedBox(height: 24),
                 ],
               ),
             ),
           ),
-          // ===================== END BODY =====================
         );
       },
     );
   }
-
-  // ===================== END BUILD =====================
 }
 
-// ===================== RINGKASAN ITEM =====================
+/// Widget untuk menampilkan satu baris item pada kartu ringkasan.
 class RingkasanItem extends StatelessWidget {
   final String label;
   final int value;
@@ -212,5 +226,3 @@ class RingkasanItem extends StatelessWidget {
     );
   }
 }
-
-// ===================== END RINGKASAN ITEM =====================

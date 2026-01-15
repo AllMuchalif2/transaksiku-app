@@ -1,9 +1,12 @@
+import 'package:app_uang/providers/transaksi_provider.dart';
 import 'package:flutter/material.dart';
-import 'ringkasan.dart';
+import 'package:provider/provider.dart';
+import 'beranda.dart';
 import 'pengeluaran.dart';
 import 'pemasukan.dart';
 import 'pengaturan.dart';
 
+/// Widget utama yang mengatur navigasi antar layar menggunakan BottomNavigationBar.
 class NavigasiScreen extends StatefulWidget {
   const NavigasiScreen({Key? key}) : super(key: key);
 
@@ -12,14 +15,27 @@ class NavigasiScreen extends StatefulWidget {
 }
 
 class _NavigasiScreenState extends State<NavigasiScreen> {
-  int _index = 0;
+  int _index = 0; // Indeks layar yang sedang aktif.
 
-  final _pages = [
-    const RingkasanScreen(),
+  // Daftar layar yang akan ditampilkan.
+  final List<Widget> _pages = [
+    const BerandaScreen(),
     const PengeluaranScreen(),
     const PemasukanScreen(),
     const PengaturanScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Memuat data transaksi saat aplikasi pertama kali dijalankan.
+    Future.microtask(
+      () => Provider.of<TransaksiProvider>(
+        context,
+        listen: false,
+      ).loadTransaksi(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +48,7 @@ class _NavigasiScreenState extends State<NavigasiScreen> {
             _index = newIndex;
           });
         },
-        selectedItemColor: Colors.black,
+        selectedItemColor: Colors.teal,
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
         items: const [

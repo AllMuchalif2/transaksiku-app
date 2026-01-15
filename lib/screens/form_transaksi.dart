@@ -1,13 +1,11 @@
-// ==================== IMPORT ====================
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../models/transaksi.dart';
-import '../providers/transaksi_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
-// ==================== END IMPORT ====================
+import '../models/transaksi.dart';
+import '../providers/transaksi_provider.dart';
 
-// ==================== FORMATTER UNTUK RUPIAH ====================
+/// Formatter untuk input mata uang Rupiah.
 class CurrencyInputFormatter extends TextInputFormatter {
   final NumberFormat _formatter = NumberFormat.currency(
     locale: 'id_ID',
@@ -20,11 +18,11 @@ class CurrencyInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    // Menghapus semua karakter kecuali angka
+    // Menghapus semua karakter non-numerik.
     String newText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
     if (newText.isEmpty) return newValue.copyWith(text: '');
 
-    // Format ulang jadi rupiah
+    // Memformat ulang angka menjadi format Rupiah.
     final number = int.parse(newText);
     final newString = _formatter.format(number);
 
@@ -34,19 +32,18 @@ class CurrencyInputFormatter extends TextInputFormatter {
     );
   }
 }
-// ==================== END FORMATTER ====================
 
-// ==================== FORM TRANSAKSI ====================
+/// Widget untuk form tambah atau edit transaksi.
 class FormTransaksi extends StatefulWidget {
-  final String jenis; // pemasukan / pengeluaran
-  final Transaksi? transaksi;
+  final String jenis; // Jenis transaksi: 'pemasukan' atau 'pengeluaran'.
+  final Transaksi?
+  transaksi; // Data transaksi jika dalam mode edit, null jika mode tambah.
 
   const FormTransaksi({super.key, required this.jenis, this.transaksi});
 
   @override
   State<FormTransaksi> createState() => _FormTransaksiState();
 }
-// ==================== END HEADER WIDGET ====================
 
 class _FormTransaksiState extends State<FormTransaksi> {
   final _formKey = GlobalKey<FormState>();
@@ -54,10 +51,10 @@ class _FormTransaksiState extends State<FormTransaksi> {
   final TextEditingController _jumlahController = TextEditingController();
   DateTime _tanggal = DateTime.now();
 
-  // ==================== INISIALISASI ====================
   @override
   void initState() {
     super.initState();
+    // Jika dalam mode edit, isi form dengan data yang ada.
     if (widget.transaksi != null) {
       _namaController.text = widget.transaksi!.nama;
       _jumlahController.text = NumberFormat.currency(
@@ -68,12 +65,11 @@ class _FormTransaksiState extends State<FormTransaksi> {
       _tanggal = widget.transaksi!.tanggal;
     }
   }
-  // ==================== END INISIALISASI ====================
 
-  // ==================== SIMPAN TRANSAKSI ====================
+  /// Menyimpan data transaksi ke database.
   void _simpan() {
     if (_formKey.currentState!.validate()) {
-      // Ambil hanya angka dari string
+      // Mengambil nilai angka dari input jumlah.
       final nilaiBersih = _jumlahController.text.replaceAll(
         RegExp(r'[^0-9]'),
         '',
@@ -89,24 +85,38 @@ class _FormTransaksiState extends State<FormTransaksi> {
       );
 
       final provider = Provider.of<TransaksiProvider>(context, listen: false);
+
+      // Membedakan antara tambah data baru dan update data lama.
       if (widget.transaksi == null) {
         provider.tambahTransaksi(transaksiBaru);
       } else {
         provider.updateTransaksi(transaksiBaru);
       }
 
-      Navigator.pop(context);
+      Navigator.pop(context, true); // Kembali ke layar sebelumnya setelah simpan.
     }
   }
-  // ==================== END SIMPAN ====================
 
-  // ==================== PILIH TANGGAL ====================
+  /// Menampilkan dialog pemilih tanggal.
   Future<void> _pilihTanggal() async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _tanggal,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.teal,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       setState(() {
@@ -114,16 +124,17 @@ class _FormTransaksiState extends State<FormTransaksi> {
       });
     }
   }
-  // ==================== END PILIH TANGGAL ====================
 
-  // ==================== BUILD UI ====================
   @override
   Widget build(BuildContext context) {
     final isEdit = widget.transaksi != null;
+    final title = isEdit ? 'Edit ${widget.jenis}' : 'Tambah ${widget.jenis}';
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEdit ? 'Edit ${widget.jenis}' : 'Tambah ${widget.jenis}'),
+        title: Text(title),
+        backgroundColor: Colors.teal,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -131,47 +142,64 @@ class _FormTransaksiState extends State<FormTransaksi> {
           key: _formKey,
           child: Column(
             children: [
-              // ===== Field Nama =====
               TextFormField(
                 controller: _namaController,
-                decoration: const InputDecoration(labelText: 'Nama Transaksi'),
+                decoration: const InputDecoration(
+                  labelText: 'Nama Transaksi',
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.teal),
+                  ),
+                ),
+                cursorColor: Colors.teal,
                 validator: (value) =>
-                    value == null || value.isEmpty ? 'Wajib diisi' : null,
+                    value == null || value.isEmpty ? 'Nama wajib diisi' : null,
               ),
-              // ===== Field Jumlah Uang (Dengan Format Rupiah) =====
               TextFormField(
                 controller: _jumlahController,
-                decoration: const InputDecoration(labelText: 'Jumlah Uang'),
+                decoration: const InputDecoration(
+                  labelText: 'Jumlah Uang',
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.teal),
+                  ),
+                ),
+                cursorColor: Colors.teal,
                 keyboardType: TextInputType.number,
                 inputFormatters: [CurrencyInputFormatter()],
                 validator: (value) {
-                  if (value == null || value.isEmpty)
-                    return 'Masukkan jumlah uang';
+                  if (value == null || value.isEmpty) {
+                    return 'Jumlah uang wajib diisi';
+                  }
                   final cleaned = value.replaceAll(RegExp(r'[^0-9]'), '');
                   if (cleaned.isEmpty || int.tryParse(cleaned) == null) {
-                    return 'Masukkan angka valid';
+                    return 'Format angka tidak valid';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16),
-              // ===== Tanggal =====
               Row(
                 children: [
                   Text('Tanggal: ${DateFormat('dd/MM/yyyy').format(_tanggal)}'),
                   const Spacer(),
                   ElevatedButton(
                     onPressed: _pilihTanggal,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      foregroundColor: Colors.white,
+                    ),
                     child: const Text('Pilih Tanggal'),
                   ),
                 ],
               ),
               const SizedBox(height: 24),
-              // ===== Tombol Simpan =====
               ElevatedButton.icon(
                 onPressed: _simpan,
                 icon: const Icon(Icons.save),
                 label: const Text('Simpan'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal,
+                  foregroundColor: Colors.white,
+                ),
               ),
             ],
           ),
@@ -179,8 +207,4 @@ class _FormTransaksiState extends State<FormTransaksi> {
       ),
     );
   }
-
-  // ==================== END BUILD ====================
 }
-
-// ==================== END FORM TRANSAKSI ====================

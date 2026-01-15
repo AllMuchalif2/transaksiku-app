@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/transaksi.dart';
@@ -33,29 +34,50 @@ class DatabaseHelper {
   }
 
   Future<int> insertTransaksi(Transaksi trx) async {
-    final dbClient = await db;
-    return await dbClient.insert('transaksi', trx.toMap());
+    try {
+      final dbClient = await db;
+      return await dbClient.insert('transaksi', trx.toMap());
+    } catch (e) {
+      debugPrint("Error saat insert: $e");
+      rethrow;
+    }
   }
 
   Future<List<Transaksi>> getTransaksi() async {
-    final dbClient = await db;
-    final maps = await dbClient.query('transaksi', orderBy: 'tanggal DESC');
-    return maps.map((e) => Transaksi.fromMap(e)).toList();
+    try {
+      final dbClient = await db;
+      final maps = await dbClient.query('transaksi', orderBy: 'tanggal DESC');
+      return maps.map((e) => Transaksi.fromMap(e)).toList();
+    } catch (e) {
+      debugPrint("Error saat get: $e");
+      rethrow;
+    }
   }
 
   Future<int> updateTransaksi(Transaksi trx) async {
-    final dbClient = await db;
-    return await dbClient.update(
-      'transaksi',
-      trx.toMap(),
-      where: 'id = ?',
-      whereArgs: [trx.id],
-    );
+    try {
+      final dbClient = await db;
+      return await dbClient.update(
+        'transaksi',
+        trx.toMap(),
+        where: 'id = ?',
+        whereArgs: [trx.id],
+      );
+    } catch (e) {
+      debugPrint("Error saat update: $e");
+      rethrow;
+    }
   }
 
   Future<int> deleteTransaksi(int id) async {
-    final dbClient = await db;
-    return await dbClient.delete('transaksi', where: 'id = ?', whereArgs: [id]);
+    try {
+      final dbClient = await db;
+      return await dbClient
+          .delete('transaksi', where: 'id = ?', whereArgs: [id]);
+    } catch (e) {
+      debugPrint("Error saat delete: $e");
+      rethrow;
+    }
   }
 
   Future close() async {
