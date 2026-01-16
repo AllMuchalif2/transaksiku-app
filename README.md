@@ -12,6 +12,8 @@
 
 **Transaksiku-App** adalah aplikasi pencatat transaksi yang membantu Anda mengelola dan memantau keuangan pribadi secara mudah. Dengan UI yang bersih dan intuitif, aplikasi ini dirancang untuk semua kalangan, baik untuk melacak pengeluaran harian maupun merencanakan anggaran bulanan.
 
+- download releases application [disini](https://github.com/AllMuchalif2/transaksiku-app/releases/tag/v2.0)
+
 ---
 
 ## 🚀 What's New in Version 2.0
@@ -46,9 +48,9 @@
 
 ---
 
-## 📱 Aplikasi
+## 📂 BackEnd AI Service
 
-- download releases application [disini](https://release-assets.githubusercontent.com/github-production-release-asset/1027675084/a7aac172-4e33-40fb-b49c-c3c80d1fa003?sp=r&sv=2018-11-09&sr=b&spr=https&se=2025-09-25T00%3A22%3A48Z&rscd=attachment%3B+filename%3Dapp-release.apk&rsct=application%2Fvnd.android.package-archive&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2025-09-24T23%3A22%3A05Z&ske=2025-09-25T00%3A22%3A48Z&sks=b&skv=2018-11-09&sig=nW6bKVwKLUSvq3wvswvZWUdSN8VBZGhVpcHbQfk2FkA%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc1ODc1NjQyNSwibmJmIjoxNzU4NzU2MTI1LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.RO2UFnsRKUusISZOqFRmJwVpf4cKb_ZCrpn4KYeF9q4&response-content-disposition=attachment%3B%20filename%3Dapp-release.apk&response-content-type=application%2Fvnd.android.package-archive)
+Repositori Back-End AI Service: [groq-for-transaksiku-app](https://github.com/AllMuchalif2/groq-for-transaksiku-app/)
 
 ---
 

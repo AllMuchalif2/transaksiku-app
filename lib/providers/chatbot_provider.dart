@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -97,6 +98,17 @@ class ChatBotProvider with ChangeNotifier {
           'Gagal terhubung ke server (Status: ${response.statusCode})',
         );
       }
+    } on SocketException {
+      _messages.add({
+        'role': 'bot',
+        'text':
+            'Error: Gagal terhubung ke host.\n\n'
+            'Ini bisa terjadi karena:\n'
+            '1. Tidak ada koneksi internet.\n'
+            '2. Typo pada URL backend di file .env.\n'
+            '3. Backend belum ter-deploy atau URL salah.',
+        'type': 'error',
+      });
     } catch (e) {
       _messages.add({
         'role': 'bot',

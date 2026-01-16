@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/transaksi.dart';
@@ -38,7 +37,6 @@ class DatabaseHelper {
       final dbClient = await db;
       return await dbClient.insert('transaksi', trx.toMap());
     } catch (e) {
-      debugPrint("Error saat insert: $e");
       rethrow;
     }
   }
@@ -49,7 +47,6 @@ class DatabaseHelper {
       final maps = await dbClient.query('transaksi', orderBy: 'tanggal DESC');
       return maps.map((e) => Transaksi.fromMap(e)).toList();
     } catch (e) {
-      debugPrint("Error saat get: $e");
       rethrow;
     }
   }
@@ -64,7 +61,6 @@ class DatabaseHelper {
         whereArgs: [trx.id],
       );
     } catch (e) {
-      debugPrint("Error saat update: $e");
       rethrow;
     }
   }
@@ -75,7 +71,6 @@ class DatabaseHelper {
       return await dbClient
           .delete('transaksi', where: 'id = ?', whereArgs: [id]);
     } catch (e) {
-      debugPrint("Error saat delete: $e");
       rethrow;
     }
   }
@@ -85,7 +80,6 @@ class DatabaseHelper {
       final dbClient = await db;
       await dbClient.delete('transaksi');
     } catch (e) {
-      debugPrint("Error saat delete all: $e");
       rethrow;
     }
   }
