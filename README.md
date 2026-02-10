@@ -18,7 +18,7 @@
 
 ## 🚀 What's New in Version 3.0
 
-- **Visualisasi Ringkasan Transaksi:** Menambahkan 2 grafik pada beranda untuk kemudahan membaca informasi
+- **Visualisasi Ringkasan Transaksi:** Menambahkan 2 grafik pada beranda untuk kemudahan membaca informasi.
 
 ---
 
@@ -43,6 +43,8 @@
 - **Intl:** Untuk format tanggal dan mata uang.
 - **HTTP:** Untuk komunikasi dengan API chatbot.
 - **Flutter Dotenv:** Untuk manajemen environment variables (.env).
+- **FL Chart:** Untuk visualisasi data grafik (Pie & Bar Chart).
+
 
 ---
 
