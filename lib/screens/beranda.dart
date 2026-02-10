@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 import '../providers/transaksi_provider.dart';
 import '../models/transaksi.dart';
+import './widgets/ringkasan_pie_chart.dart';
+import './widgets/tren_bar_chart.dart';
 import 'chatbot.dart';
 
 /// Layar utama yang menampilkan ringkasan keuangan.
@@ -180,6 +182,19 @@ class _BerandaScreenState extends State<BerandaScreen> {
                         ],
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // --- GRAFIK 1: PIE CHART (RINGKASAN) ---
+                  RingkasanPieChart(
+                    totalPemasukan: totalPemasukan,
+                    totalPengeluaran: totalPengeluaran,
+                  ),
+
+                  // --- GRAFIK 2: BAR CHART (TREN) ---
+                  TrenBarChart(
+                    daftarTransaksi: provider.daftarTransaksi,
+                    filter: _filter,
                   ),
                   const SizedBox(height: 24),
                 ],

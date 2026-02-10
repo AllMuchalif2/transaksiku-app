@@ -1,9 +1,9 @@
 # Transaksiku-App 🚀
 
-**Versi 2.0 — Aplikasi Pencatat Transaksi Pribadi berbasis Flutter**
+**Versi 3.0 — Aplikasi Pencatat Transaksi Pribadi berbasis Flutter**
 
 ![Flutter](https://img.shields.io/badge/Flutter-02569B.svg?style=flat&logo=Flutter&logoColor=white)
-![Versi](https://img.shields.io/badge/version-2.0-blue)
+![Versi](https://img.shields.io/badge/version-3.0-blue)
 ![Last Commit](https://img.shields.io/github/last-commit/AllMuchalif2/transaksiku-app?style=flat&logo=git&logoColor=white&color=0080ff)
 
 ---
@@ -12,16 +12,13 @@
 
 **Transaksiku-App** adalah aplikasi pencatat transaksi yang membantu Anda mengelola dan memantau keuangan pribadi secara mudah. Dengan UI yang bersih dan intuitif, aplikasi ini dirancang untuk semua kalangan, baik untuk melacak pengeluaran harian maupun merencanakan anggaran bulanan.
 
-- download releases application [disini](https://github.com/AllMuchalif2/transaksiku-app/releases/tag/v2.0)
+- download releases application [disini](https://github.com/AllMuchalif2/transaksiku-app/releases/tag/v3.0)
 
 ---
 
-## 🚀 What's New in Version 2.0
+## 🚀 What's New in Version 3.0
 
-- **Asisten AI Chatbot:** Tanya apa saja seputar keuangan Anda! Asisten AI cerdas siap membantu Anda mendapatkan informasi transaksi dengan cepat melalui percakapan.
-- **Mode Tema (Light/Dark):** Ganti tampilan aplikasi antara mode terang dan gelap sesuai preferensi Anda.
-- **Hapus Semua Data:** Opsi untuk menghapus seluruh riwayat transaksi dengan cepat melalui halaman pengaturan.
-- **Peningkatan UI/UX:** Penyempurnaan antarmuka untuk pengalaman pengguna yang lebih baik dan lebih modern.
+- **Visualisasi Ringkasan Transaksi:** Menambahkan 2 grafik pada beranda untuk kemudahan membaca informasi
 
 ---
 
@@ -31,6 +28,7 @@
 - **Catat & Ubah Transaksi:** Tambahkan dan edit data pemasukan atau pengeluaran dengan mudah.
 - **Filter Transaksi:** Saring data berdasarkan harian, bulanan, tahunan, atau tampilkan semua transaksi.
 - **Laporan Selisih:** Dapatkan informasi selisih antara total pemasukan dan pengeluaran secara real-time.
+- **Visualisasi Data:** Dapatkan informasi menggunakan grafik yang mudah dibadca.
 - **Mode Terang & Gelap:** Sesuaikan tampilan aplikasi dengan mode tema yang nyaman di mata.
 - **Manajemen Data:** Hapus semua data transaksi jika diperlukan.
 - **Tampilan Sederhana & Intuitif:** UI bersih dan mudah digunakan untuk semua kalangan.

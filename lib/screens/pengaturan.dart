@@ -19,6 +19,7 @@ class PengaturanScreen extends StatelessWidget {
         children: [
           _buildThemeCard(context),
           _buildResetCard(context),
+          _buildAboutCard(context),
         ],
       ),
     );
@@ -71,8 +72,82 @@ class PengaturanScreen extends StatelessWidget {
           ),
         ),
         subtitle: const Text(
-            'Tindakan ini akan menghapus semua catatan transaksi secara permanen.'),
+          'Tindakan ini akan menghapus semua catatan transaksi secara permanen.',
+        ),
         onTap: () => _showConfirmationDialog(context),
+      ),
+    );
+  }
+
+  Widget _buildAboutCard(BuildContext context) {
+    return Card(
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: ListTile(
+        leading: const Icon(
+          Icons.info_outline,
+          color: Colors.blueAccent,
+          size: 36,
+        ),
+        title: const Text(
+          'Tentang Aplikasi',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: const Text('Informasi aplikasi dan pengembang'),
+        onTap: () => _showAboutDialog(context),
+      ),
+    );
+  }
+
+  void _showAboutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.info_outline, color: Colors.teal),
+            SizedBox(width: 10),
+            Text('Tentang Aplikasi'),
+          ],
+        ),
+        content: const SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Transaksiku App v3.0',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Aplikasi sederhana untuk mencatat transaksi keuangan pribadi Anda. Dibangun dengan Flutter.',
+              ),
+              Divider(height: 30),
+              Text(
+                'Pengembang',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              SizedBox(height: 16),
+              Row(children: [SizedBox(width: 8), Text('GitHub: AllMuchalif2')]),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  SizedBox(width: 8),
+                  Text('Instagram: @allmuchalif2'),
+                ],
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Tutup', style: TextStyle(color: Colors.teal)),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
       ),
     );
   }
@@ -83,7 +158,8 @@ class PengaturanScreen extends StatelessWidget {
       builder: (ctx) => AlertDialog(
         title: const Text('Konfirmasi'),
         content: const Text(
-            'Apakah Anda yakin ingin menghapus semua data transaksi? Tindakan ini tidak dapat dibatalkan.'),
+          'Apakah Anda yakin ingin menghapus semua data transaksi? Tindakan ini tidak dapat dibatalkan.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -107,20 +183,23 @@ class PengaturanScreen extends StatelessWidget {
 
   void _deleteAllData(BuildContext context) {
     final provider = Provider.of<TransaksiProvider>(context, listen: false);
-    provider.hapusSemuaTransaksi().then((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Semua data transaksi berhasil dihapus.'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    }).catchError((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Gagal menghapus data.'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    });
+    provider
+        .hapusSemuaTransaksi()
+        .then((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Semua data transaksi berhasil dihapus.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        })
+        .catchError((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Gagal menghapus data.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        });
   }
 }
